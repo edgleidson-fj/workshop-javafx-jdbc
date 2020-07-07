@@ -1,22 +1,24 @@
 package application;
-//Aula 266 - Criação do Projeto.	
+//Aula 267 - Tela MainView.	
 import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-
+import javafx.stage.Stage;
 
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
-		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setScene(scene);
+		try {														 //Diretório da View.		
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainView.fxml"));
+			Parent parent = loader.load();
+			Scene mainScene = new Scene(parent);
+			primaryStage.setScene(mainScene);
+			primaryStage.setTitle("Exemplo de Aplicação JavaFX");
 			primaryStage.show();
-		} catch(Exception e) {
-			e.printStackTrace();
+		} 
+		catch(Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 	
