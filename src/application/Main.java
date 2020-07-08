@@ -1,5 +1,5 @@
 package application;
-//Aula 268 -Design da Tela MainView.	
+//Aula 269 - MainViewController.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
