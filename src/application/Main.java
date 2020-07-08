@@ -1,5 +1,5 @@
 package application;
-//Aula 269 - MainViewController.	
+//Aula 270 - Tela SobreView.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,6 +7,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	
+	private static Scene mainScene;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {														 //Diretório da View.		
@@ -17,7 +20,7 @@ public class Main extends Application {
 			scrollPane.setFitToHeight(true); //Altura.
 			scrollPane.setFitToWidth(true); //Largura.
 			
-			Scene mainScene = new Scene(scrollPane);
+			mainScene = new Scene(scrollPane);
 			primaryStage.setScene(mainScene);
 			primaryStage.setTitle("Exemplo de Aplicação JavaFX");
 			primaryStage.show();
@@ -25,6 +28,11 @@ public class Main extends Application {
 		catch(Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	// Pegar MainScene da classe, para disponibilizar para outras classes.
+	public static Scene pegarMainScene() {
+		return mainScene;
 	}
 	
 	public static void main(String[] args) {
