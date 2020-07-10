@@ -1,5 +1,5 @@
 package application;
-//Aula 270 - Tela SobreView.	
+//Aula 272 - Design Tela DepartamentoListaView.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
