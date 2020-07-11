@@ -1,5 +1,5 @@
 package application;
-//Aula 272 - Design Tela DepartamentoListaView.	
+//Aula 273 - DepartamentoListaViewController.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
