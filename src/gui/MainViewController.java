@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.service.DepartamentoService;
 
 public class MainViewController implements Initializable {
 
@@ -35,7 +36,8 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		carregarView("/gui/DepartamentoListaView.fxml");
+		//carregarView("/gui/DepartamentoListaView.fxml");
+		carregarView2("/gui/DepartamentoListaView.fxml"); // Teste.
 	}
 
 	@FXML
@@ -74,5 +76,40 @@ public class MainViewController implements Initializable {
 			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela!", ex.getMessage(), AlertType.ERROR);
 		}
 	}
+	
+	
+	//--------------------------------------------------------------------------------
+	// Teste DepartamentoLista
+	private synchronized void carregarView2(String nomeAbsoluto) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			VBox novoVBox = loader.load(); 
+			
+			// Definir uma Scene com a referencia da mainScene da classe Main.
+			Scene mainScene = Main.pegarMainScene();
+			
+			// Referencia para VBox da janela principal (MainView).
+			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
+			
+			// Referencia para o Menu principal.
+			Node mainMenu = mainVBox.getChildren().get(0);
+			
+			// Limpar os conteúdos (Filhos) da tela anterior.
+			mainVBox.getChildren().clear();
+			
+			// Adicionar os conteúdos (Filho) da nova tela.
+			mainVBox.getChildren().add(mainMenu);
+			mainVBox.getChildren().addAll(novoVBox);
+			
+			// Referencia do Controller.
+			DepartamentoListaController controller = loader.getController();
+			controller.setDepartamentoService(new DepartamentoService());
+			controller.atualizarTableView();
+		} 
+		catch (IOException ex) {
+			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela!", ex.getMessage(), AlertType.ERROR);
+		}
+	}
 
+	//----
 }

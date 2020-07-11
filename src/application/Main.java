@@ -1,5 +1,5 @@
 package application;
-//Aula 273 - DepartamentoListaViewController.	
+//Aula 274 - DepartamentoService.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
