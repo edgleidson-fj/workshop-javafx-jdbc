@@ -2,7 +2,8 @@ package model.entidade;
 
 import java.io.Serializable;
 
-//Serializable - Serve para transformar os Objetos em sequencia de bytes para ser gravado em arquivo ou trafegado em rede.
+// Serializable - Serve para transformar os Objetos em sequencia de bytes para ser gravado
+// em arquivo ou trafegado em rede.
 public class Departamento implements Serializable{
 
 	private static final long serialVersionUID = 1L; //Serializable.

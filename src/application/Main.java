@@ -1,5 +1,5 @@
 package application;
-//Aula 275 - Ação de inicialização como parâmetro (Consumer <T>).	
+//Aula 276 - Adicionando acesso ao banco de dados.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
