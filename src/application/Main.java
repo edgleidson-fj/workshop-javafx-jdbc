@@ -1,5 +1,5 @@
 package application;
-//Aula 277 - Design do DepartamentoForm (dialog).	
+//Aula 278 - DepartamentoFormController.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

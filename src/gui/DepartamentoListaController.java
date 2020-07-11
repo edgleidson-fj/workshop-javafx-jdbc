@@ -48,7 +48,8 @@ public class DepartamentoListaController implements Initializable{
 	
 	@FXML
 	public void onBtNovoAction(ActionEvent evento) {
-		Stage stagePai = Utils.stageAtual(evento);
+		// Retornando Stage atual para caixa de dialogo.
+		Stage stagePai = Utils.stageAtual(evento); 
 		criarDialogForm("/gui/departamentoFormView.fxml", stagePai);
 	}
 	
