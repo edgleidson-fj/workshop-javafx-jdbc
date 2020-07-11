@@ -1,5 +1,5 @@
 package application;
-//Aula 276 - Adicionando acesso ao banco de dados.	
+//Aula 277 - Design do DepartamentoForm (dialog).	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

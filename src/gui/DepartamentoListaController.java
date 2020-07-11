@@ -1,18 +1,27 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.util.Alertas;
+import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entidade.Departamento;
 import model.service.DepartamentoService;
@@ -38,8 +47,9 @@ public class DepartamentoListaController implements Initializable{
 	private ObservableList<Departamento> obsLista;
 	
 	@FXML
-	public void onBtNovoAction() {
-		System.out.println("onBtNovoAction()");
+	public void onBtNovoAction(ActionEvent evento) {
+		Stage stagePai = Utils.stageAtual(evento);
+		criarDialogForm("/gui/departamentoFormView.fxml", stagePai);
 	}
 	
 	// Método do Initializable.
@@ -73,6 +83,26 @@ public class DepartamentoListaController implements Initializable{
 		List<Departamento> lista = service.buscarTudo();
 		obsLista = FXCollections.observableArrayList(lista);
 		tableViewDepartamento.setItems(obsLista);
+	}
+	
+	// DepartamentoForm.
+	public void criarDialogForm(String nomeAbsoluto, Stage stagePai) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			Pane painel = loader.load();
+			
+			// Caixa de Dialogo.
+			Stage stageDialog = new Stage();
+			stageDialog.setTitle("Informe os dados do Departamento");
+			stageDialog.setScene(new Scene(painel));
+			stageDialog.setResizable(false); // Redimencionavel.
+			stageDialog.initOwner(stagePai); // Stage pai da janela.
+			stageDialog.initModality(Modality.WINDOW_MODAL); // Impedir o acesso de outras janela.
+			stageDialog.showAndWait();
+		} 
+		catch (IOException ex) {
+			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar View", ex.getMessage(), AlertType.ERROR);
+		}
 	}
 
 }
