@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alertas;
@@ -36,13 +37,17 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		//carregarView("/gui/DepartamentoListaView.fxml");
-		carregarView2("/gui/DepartamentoListaView.fxml"); // Teste.
+		// Na hora de passar a chamada (carregarView), incluir segundo parâmetro para passar
+		// uma função com (Expressão Lambida) para inicializar o Controller.
+		carregarView("/gui/DepartamentoListaView.fxml", (DepartamentoListaController controle) -> {
+			controle.setDepartamentoService(new DepartamentoService());
+			controle.atualizarTableView();
+		});
 	}
 
 	@FXML
 	public void onMenuItemSobreAction() {
-		carregarView("/gui/SobreView.fxml");
+		carregarView("/gui/SobreView.fxml", x -> {/* Vázio */});
 	}
 
 	// Método da Interface Initialiazable.
@@ -50,66 +55,36 @@ public class MainViewController implements Initializable {
 	public void initialize(URL url, ResourceBundle rb) {
 	}
 
-	// Função para abrir outra tela.
-	private synchronized void carregarView(String nomeAbsoluto) {
+	// Função para abrir outra tela com dois parâmetros (String, Consumer<T>).
+	private synchronized <T> void carregarView(String nomeAbsoluto, Consumer<T> consumerAcaoDeInicializacao) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
-			VBox novoVBox = loader.load(); 
-			
+			VBox novoVBox = loader.load();
+
 			// Definir uma Scene com a referencia da mainScene da classe Main.
 			Scene mainScene = Main.pegarMainScene();
-			
+
 			// Referencia para VBox da janela principal (MainView).
 			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-			
+
 			// Referencia para o Menu principal.
 			Node mainMenu = mainVBox.getChildren().get(0);
-			
+
 			// Limpar os conteúdos (Filhos) da tela anterior.
 			mainVBox.getChildren().clear();
-			
+
 			// Adicionar os conteúdos (Filho) da nova tela.
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(novoVBox);
-		} 
-		catch (IOException ex) {
-			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela!", ex.getMessage(), AlertType.ERROR);
+
+			// Consumer <T> - Comando para executar as funções que for passada por
+			// argumentos nos métodos(Eventos).
+			T controle = loader.getController();
+			consumerAcaoDeInicializacao.accept(controle);
 		}
-	}
-	
-	
-	//--------------------------------------------------------------------------------
-	// Teste DepartamentoLista
-	private synchronized void carregarView2(String nomeAbsoluto) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
-			VBox novoVBox = loader.load(); 
-			
-			// Definir uma Scene com a referencia da mainScene da classe Main.
-			Scene mainScene = Main.pegarMainScene();
-			
-			// Referencia para VBox da janela principal (MainView).
-			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-			
-			// Referencia para o Menu principal.
-			Node mainMenu = mainVBox.getChildren().get(0);
-			
-			// Limpar os conteúdos (Filhos) da tela anterior.
-			mainVBox.getChildren().clear();
-			
-			// Adicionar os conteúdos (Filho) da nova tela.
-			mainVBox.getChildren().add(mainMenu);
-			mainVBox.getChildren().addAll(novoVBox);
-			
-			// Referencia do Controller.
-			DepartamentoListaController controller = loader.getController();
-			controller.setDepartamentoService(new DepartamentoService());
-			controller.atualizarTableView();
-		} 
 		catch (IOException ex) {
 			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela!", ex.getMessage(), AlertType.ERROR);
 		}
 	}
 
-	//----
 }

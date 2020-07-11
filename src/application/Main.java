@@ -1,5 +1,5 @@
 package application;
-//Aula 274 - DepartamentoService.	
+//Aula 275 - Ação de inicialização como parâmetro (Consumer <T>).	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

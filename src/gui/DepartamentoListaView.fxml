@@ -28,10 +28,10 @@
             </Button>
         </items>
       </ToolBar>
-      <TableView fx:id="tableViewDepartamento" maxHeight="1.7976931348623157E308" prefWidth="330.0">
+      <TableView fx:id="tableViewDepartamento" minHeight="290.0" prefHeight="184.0">
         <columns>
           <TableColumn fx:id="tableColumnId" prefWidth="75.0" text="ID" />
-          <TableColumn fx:id="tableColumnNome" prefWidth="75.0" text="Nome" />
+          <TableColumn fx:id="tableColumnNome" prefWidth="183.0" text="Nome" />
         </columns>
          <padding>
             <Insets bottom="1.0" left="5.0" right="5.0" top="5.0" />
