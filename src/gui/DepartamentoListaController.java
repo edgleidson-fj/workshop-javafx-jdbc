@@ -96,6 +96,7 @@ public class DepartamentoListaController implements Initializable{
 			// Referencia para controlador.
 			DepartamentoFormController controle = loader.getController();
 			controle.setDepartamento(obj);
+			controle.setDepartamentoService(new DepartamentoService());
 			controle.atualizarDialogForm();
 			
 			// Caixa de Dialogo.

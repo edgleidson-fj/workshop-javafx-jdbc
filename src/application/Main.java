@@ -1,5 +1,5 @@
 package application;
-//Aula 279 - Passando um objeto Departamento para o formulário.	
+//Aula 280 - Salvar um novo Departamento.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

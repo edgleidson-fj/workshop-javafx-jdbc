@@ -8,10 +8,21 @@ import javafx.stage.Stage;
 public class Utils {
 
 	// Função para retornar o Stage atual.
-	public static Stage stageAtual(ActionEvent evento) {
-		
+	public static Stage stageAtual(ActionEvent evento) {		
 		// Necessário fazer os Cast (Stage e Node).
 		// O código do evento vai está dentro do parenteses junto com Cast (Node).
 		return (Stage)((Node) evento.getSource()).getScene().getWindow();
 	}
+	
+	
+	// Função para transformar String em Inteiro.
+	public static Integer stringParaInteiro(String str) {
+		try {
+			return Integer.parseInt(str);	
+		} 
+		catch (NumberFormatException ex) {
+			return null;
+		}		
+	}
+	
 }

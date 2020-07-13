@@ -3,19 +3,26 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import bd.BDException;
+import gui.util.Alertas;
 import gui.util.Restricoes;
+import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import model.entidade.Departamento;
+import model.service.DepartamentoService;
 
 public class DepartamentoFormController implements Initializable {
 	
-	//Dependencia da Entidade Departamento.
+	//Dependencia.
 	private Departamento entidade;
-
+	private DepartamentoService service;
+//---------------------------------------------
 	@FXML
 	private TextField txtId;
 
@@ -31,21 +38,51 @@ public class DepartamentoFormController implements Initializable {
 	@FXML
 	private Button btCancelar;
 	
-	// Injeção da dependendia na Classe.
+	// Injeção da dependencia na Classe.
 	public void setDepartamento(Departamento entidade) {
 		this.entidade = entidade;
 	}
+	
+	public void setDepartamentoService(DepartamentoService service) {
+		this.service = service;
+	}
+	//----------------------------------------------------------------
 
 	@FXML
-	public void onBtSalvarAction() {
-		System.out.println("onBtSalvarAction()");
+	public void onBtSalvarAction(ActionEvent evento) {
+		if(entidade == null) {
+			throw new IllegalStateException("Entidade nulo!");
+		}
+		if(service == null) {
+			throw new IllegalStateException("Service nulo!");
+		}
+		
+		try {
+			entidade = pegarDadosFormulario();
+			service.salvarOuAtualizar(entidade);
+			Utils.stageAtual(evento).close(); // Fechar Janela.
+		} 
+		catch (BDException ex) {
+			Alertas.mostrarAlerta("Erro ao salvar dados", null, ex.getMessage(), AlertType.ERROR);
+		}		
 	}
-
+	
 	@FXML
-	public void onBtCancelarAction() {
-		System.out.println("onBtCancelarAction()");
+	public void onBtCancelarAction(ActionEvent evento) {
+		Utils.stageAtual(evento).close();
 	}
+	
+	private Departamento pegarDadosFormulario() {
+	Departamento obj = new Departamento();
+	
+	obj.setId(Utils.stringParaInteiro(txtId.getText()));
+	obj.setNome(txtNome.getText());
+	return obj;
+	}	
 
+	
+
+	// Initializable.
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		inicializarNodes();
