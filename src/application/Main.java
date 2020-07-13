@@ -1,5 +1,5 @@
 package application;
-//Aula 278 - DepartamentoFormController.	
+//Aula 279 - Passando um objeto Departamento para o formulário.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

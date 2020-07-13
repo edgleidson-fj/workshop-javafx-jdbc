@@ -50,7 +50,8 @@ public class DepartamentoListaController implements Initializable{
 	public void onBtNovoAction(ActionEvent evento) {
 		// Retornando Stage atual para caixa de dialogo.
 		Stage stagePai = Utils.stageAtual(evento); 
-		criarDialogForm("/gui/departamentoFormView.fxml", stagePai);
+		Departamento obj = new Departamento();
+		criarDialogForm(obj, "/gui/departamentoFormView.fxml", stagePai);
 	}
 	
 	// Método do Initializable.
@@ -87,10 +88,15 @@ public class DepartamentoListaController implements Initializable{
 	}
 	
 	// DepartamentoForm.
-	public void criarDialogForm(String nomeAbsoluto, Stage stagePai) {
+	public void criarDialogForm(Departamento obj, String nomeAbsoluto, Stage stagePai) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
 			Pane painel = loader.load();
+			
+			// Referencia para controlador.
+			DepartamentoFormController controle = loader.getController();
+			controle.setDepartamento(obj);
+			controle.atualizarDialogForm();
 			
 			// Caixa de Dialogo.
 			Stage stageDialog = new Stage();
