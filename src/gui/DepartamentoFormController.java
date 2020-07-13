@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import bd.BDException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alertas;
 import gui.util.Restricoes;
 import gui.util.Utils;
@@ -23,6 +26,8 @@ public class DepartamentoFormController implements Initializable {
 	private Departamento entidade;
 	private DepartamentoService service;
 //---------------------------------------------
+	private List<DataChangeListener> refreshListeners = new ArrayList<>();
+	
 	@FXML
 	private TextField txtId;
 
@@ -37,6 +42,10 @@ public class DepartamentoFormController implements Initializable {
 
 	@FXML
 	private Button btCancelar;
+	
+	public void sobrescrevaRefreshDadosListener(DataChangeListener listener) {
+		refreshListeners.add(listener);
+	}
 	
 	// Injeção da dependencia na Classe.
 	public void setDepartamento(Departamento entidade) {
@@ -60,6 +69,7 @@ public class DepartamentoFormController implements Initializable {
 		try {
 			entidade = pegarDadosFormulario();
 			service.salvarOuAtualizar(entidade);
+			notificarAlteracaoDeDadosListener();
 			Utils.stageAtual(evento).close(); // Fechar Janela.
 		} 
 		catch (BDException ex) {
@@ -72,6 +82,13 @@ public class DepartamentoFormController implements Initializable {
 		Utils.stageAtual(evento).close();
 	}
 	
+	// Listener.
+	private void notificarAlteracaoDeDadosListener() {
+		for(DataChangeListener listener : refreshListeners) {
+			listener.onDataChanged();
+		}
+	}
+	
 	private Departamento pegarDadosFormulario() {
 	Departamento obj = new Departamento();
 	
@@ -79,8 +96,6 @@ public class DepartamentoFormController implements Initializable {
 	obj.setNome(txtNome.getText());
 	return obj;
 	}	
-
-	
 
 	// Initializable.
 	@Override

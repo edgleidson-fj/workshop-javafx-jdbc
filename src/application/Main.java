@@ -1,5 +1,5 @@
 package application;
-//Aula 280 - Salvar um novo Departamento.	
+//Aula 281 - Padrão de projeto Observer para atualizar a TableView.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
