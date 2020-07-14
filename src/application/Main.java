@@ -1,5 +1,5 @@
 package application;
-//Aula 282 - Validação de Dados & ValidationException.	
+//Aula 283 - Atualizando Departamento.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
