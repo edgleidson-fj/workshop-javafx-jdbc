@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 
 import application.Main;
-import gui.listeners.DataChangeListener;
+import gui.listeners.AlteracaoDeDadosListener;
 import gui.util.Alertas;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 import model.entidade.Departamento;
 import model.service.DepartamentoService;
 
-public class DepartamentoListaController implements Initializable, DataChangeListener{
+public class DepartamentoListaController implements Initializable, AlteracaoDeDadosListener{
 	
 	// Dependencia service.
 	private DepartamentoService service;
@@ -118,8 +118,7 @@ public class DepartamentoListaController implements Initializable, DataChangeLis
 
 	// Listener.
 	@Override
-	public void onDataChanged() {
-		System.out.println("onDataChanged()");
+	public void onRefreshDados() {
 		atualizarTableView();
 	}
 

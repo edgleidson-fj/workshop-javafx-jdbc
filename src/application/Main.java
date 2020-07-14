@@ -1,5 +1,5 @@
 package application;
-//Aula 281 - Padrão de projeto Observer para atualizar a TableView.	
+//Aula 282 - Validação de Dados & ValidationException.	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

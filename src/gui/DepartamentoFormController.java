@@ -3,10 +3,12 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import bd.BDException;
-import gui.listeners.DataChangeListener;
+import gui.listeners.AlteracaoDeDadosListener;
 import gui.util.Alertas;
 import gui.util.Restricoes;
 import gui.util.Utils;
@@ -18,15 +20,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import model.entidade.Departamento;
+import model.exceptions.ValidacaoException;
 import model.service.DepartamentoService;
 
 public class DepartamentoFormController implements Initializable {
 	
-	//Dependencia.
+	// Dependencia.
 	private Departamento entidade;
 	private DepartamentoService service;
 //---------------------------------------------
-	private List<DataChangeListener> refreshListeners = new ArrayList<>();
+	// Listener.
+	private List<AlteracaoDeDadosListener> alteracaoDeDadosListeners = new ArrayList<>();
 	
 	@FXML
 	private TextField txtId;
@@ -43,8 +47,8 @@ public class DepartamentoFormController implements Initializable {
 	@FXML
 	private Button btCancelar;
 	
-	public void sobrescrevaRefreshDadosListener(DataChangeListener listener) {
-		refreshListeners.add(listener);
+	public void sobrescrevaRefreshDadosListener(AlteracaoDeDadosListener listener) {
+		alteracaoDeDadosListeners.add(listener);
 	}
 	
 	// Injeção da dependencia na Classe.
@@ -74,7 +78,10 @@ public class DepartamentoFormController implements Initializable {
 		} 
 		catch (BDException ex) {
 			Alertas.mostrarAlerta("Erro ao salvar dados", null, ex.getMessage(), AlertType.ERROR);
-		}		
+		}
+		catch (ValidacaoException ex) {
+			setMensagemDeErro(ex.getErros()); // Exibir erro na tela.
+		}
 	}
 	
 	@FXML
@@ -84,17 +91,31 @@ public class DepartamentoFormController implements Initializable {
 	
 	// Listener.
 	private void notificarAlteracaoDeDadosListener() {
-		for(DataChangeListener listener : refreshListeners) {
-			listener.onDataChanged();
+		for(AlteracaoDeDadosListener listener : alteracaoDeDadosListeners) {
+			listener.onRefreshDados();
 		}
 	}
 	
 	private Departamento pegarDadosFormulario() {
 	Departamento obj = new Departamento();
 	
+	// Instanciando a excerção.
+	ValidacaoException erro = new ValidacaoException("Erro de validação!");
+	
 	obj.setId(Utils.stringParaInteiro(txtId.getText()));
+	
+	// Campo Nome nulo ou vazio. - .trim()= Eliminar espaço em branco no início e no final. 
+	if(txtNome.getText() == null || txtNome.getText().trim().equals("")) {
+		erro.addErro("nome", "Nome não pode está vázio.");
+	}
 	obj.setNome(txtNome.getText());
-	return obj;
+	
+	// Erro for maior que zero.
+	if(erro.getErros().size() > 0) {
+		throw erro;
+	}
+	
+	return obj;	
 	}	
 
 	// Initializable.
@@ -115,6 +136,15 @@ public class DepartamentoFormController implements Initializable {
 		}
 		txtId.setText(String.valueOf(entidade.getId())); // Transformar ID em String no TextFiled.
 		txtNome.setText(entidade.getNome());
+	}
+	
+	// Mensagem de Erro.
+	private void setMensagemDeErro(Map<String, String> erros) {
+		Set<String> campos = erros.keySet();
+		
+		if(campos.contains("nome")) {
+			labelErroNome.setText(erros.get("nome"));
+		}
 	}
 
 }
