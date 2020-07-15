@@ -1,7 +1,5 @@
 package application;
-//Aula 284 - Deletando Departamento. Apresentou alguns erros nessa aula.
-// - Erro na chamada da classe gui.util.Alertas - mostrarConfirmação().
-// - Erro não está apresntando Excerção Integridade.
+//Aula 285 - Deletando a pasta Settings.
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
