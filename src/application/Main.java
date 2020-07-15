@@ -1,5 +1,5 @@
 package application;
-//Aula 285 - Deletando a pasta Settings.
+//Aula 286 - VendedorLista.
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
