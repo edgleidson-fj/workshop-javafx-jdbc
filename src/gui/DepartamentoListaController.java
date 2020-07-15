@@ -3,9 +3,11 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Main;
+import bd.BDIntegrityException;
 import gui.listeners.AlteracaoDeDadosListener;
 import gui.util.Alertas;
 import gui.util.Utils;
@@ -18,7 +20,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -46,6 +50,9 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 	@FXML // Coluna Editar.
 	private TableColumn<Departamento, Departamento> tableColumnEditar;
 
+	@FXML // Coluna Excluir.
+	private TableColumn<Departamento, Departamento> tableColumnExcluir;
+
 	@FXML
 	private Button btNovo;
 
@@ -71,7 +78,8 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 
-		// Para o tamanho da tableView acompanhar o tamanho da altura da tela. #Não funcionou#
+		// Para o tamanho da tableView acompanhar o tamanho da altura da tela. #Não
+		// funcionou#
 		// Pegando a referencia para (Stage) atual. Necessário fazer o Cast (Stage).
 		Stage stage = (Stage) Main.pegarMainScene().getWindow();
 		tableViewDepartamento.prefHeightProperty().bind(stage.heightProperty());
@@ -82,8 +90,10 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 		this.service = service;
 	}
 
-	// Método vai ser resposável por acessar o (Service) carregar os departamentos, e jogar 
-	// os departamentos na ObservableList(), para depois ser associado com a tableView. 
+	// Método vai ser resposável por acessar o (Service) carregar os departamentos,
+	// e jogar
+	// os departamentos na ObservableList(), para depois ser associado com a
+	// tableView.
 	public void atualizarTableView() {
 		if (service == null) {
 			throw new IllegalStateException("Service nulo!");
@@ -92,6 +102,7 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 		obsLista = FXCollections.observableArrayList(lista);
 		tableViewDepartamento.setItems(obsLista);
 		criarBotaoEditar();
+		criarBotaoExcluir();
 	}
 
 	// DepartamentoForm.
@@ -148,5 +159,76 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 		});
 	}
 
+	// Botão Excluir.
+	private void criarBotaoExcluir() {
+		tableColumnExcluir.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnExcluir.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
+			private final Button button = new Button("Excluir");
+
+			@Override
+			protected void updateItem(Departamento obj, boolean vazio) {
+				super.updateItem(obj, vazio);
+
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+
+				setGraphic(button);
+				button.setOnAction(evento -> excluirEntidade(obj));
+			}
+		});
+	}
+
+	/*/ Excluir. ***Atenção*** Apresentando erro. 
+	private void excluirEntidade(Departamento obj) {
+	 Optional<ButtonType> resultado =
+			 Alertas.mostrarConfirmacao("Confirmação!", "Você tem certeza que deseja excluir?");
+		
+	 // Botão OK dentro do (Optional).
+	 if(resultado.get() == ButtonType.OK) {
+		 if(service == null) {
+			 throw new IllegalStateException("Service nulo!");
+		 }
+		 try {
+			 service.excluir(obj);
+			 atualizarTableView();
+		}
+		 catch (BDIntegrityException ex) {
+			Alertas.mostrarAlerta("Erro ao excluir objeto", null, ex.getMessage(), AlertType.ERROR);
+		}
+		 
+	 }
+	} */
 	
+	private void excluirEntidade(Departamento obj) {
+		//***ATENÇÃO*** Está apresentando erro.
+		//Optional<ButtonType> result = Alertas.showConfirmation("Confirmation", "Are you sure to delete?");
+
+		//***ATENÇÃO***
+		//---Estou usando os códigos abaixo porque está apresentando erro ao chamar da 
+		// classe (gui.util.Alertas).
+		Alert alerta = new Alert(AlertType.CONFIRMATION);
+		alerta.setTitle("Confirmação!");
+		alerta.setHeaderText(null);
+		alerta.setContentText("Você tem certeza que deseja excluir?");
+		Optional<ButtonType> resultado = alerta.showAndWait(); 
+		//------------------------------------------------------		
+
+		if (resultado.get() == ButtonType.OK) {
+			if (service == null) {
+				throw new IllegalStateException("Service was null");
+			}
+			try {
+				service.excluir(obj);
+				atualizarTableView();
+			}
+			catch (BDIntegrityException e) {
+				Alertas.mostrarAlerta("Error removing object", null, e.getMessage(), AlertType.ERROR);
+			}		
+		}
+	}
+	
+	
+//--	
 }

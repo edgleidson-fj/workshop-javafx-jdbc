@@ -1,5 +1,7 @@
 package application;
-//Aula 283 - Atualizando Departamento.	
+//Aula 284 - Deletando Departamento. Apresentou alguns erros nessa aula.
+// - Erro na chamada da classe gui.util.Alertas - mostrarConfirmação().
+// - Erro não está apresntando Excerção Integridade.
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
