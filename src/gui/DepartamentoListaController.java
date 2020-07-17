@@ -2,7 +2,6 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -20,7 +19,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -203,20 +201,9 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 	} */
 	
 	private void excluirEntidade(Departamento obj) {
-		//***ATENÇÃO*** Está apresentando erro.
-		//Optional<ButtonType> result = Alertas.showConfirmation("Confirmation", "Are you sure to delete?");
+		Optional<ButtonType> result = Alertas.mostrarConfirmacao("Confirmation", "Are you sure to delete?");
 
-		//***ATENÇÃO***
-		//---Estou usando os códigos abaixo porque está apresentando erro ao chamar da 
-		// classe (gui.util.Alertas).
-		Alert alerta = new Alert(AlertType.CONFIRMATION);
-		alerta.setTitle("Confirmação!");
-		alerta.setHeaderText(null);
-		alerta.setContentText("Você tem certeza que deseja excluir?");
-		Optional<ButtonType> resultado = alerta.showAndWait(); 
-		//------------------------------------------------------		
-
-		if (resultado.get() == ButtonType.OK) {
+		if (result.get() == ButtonType.OK) {
 			if (service == null) {
 				throw new IllegalStateException("Service was null");
 			}
@@ -224,10 +211,9 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 				service.excluir(obj);
 				atualizarTableView();
 			}
-			// Não está funcionando.
-			catch (BDIntegrityException ex) {
-				Alertas.mostrarAlerta("Error removing object", null, ex.getMessage(), AlertType.ERROR);
-			}			
+			catch (BDIntegrityException e) {
+				Alertas.mostrarAlerta("Error removing object", null, e.getMessage(), AlertType.ERROR);
+			}
 		}
 	}
 	

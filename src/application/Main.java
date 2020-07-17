@@ -1,5 +1,5 @@
 package application;
-//Aula 287 - VendedorListaTableView. - Erro Date na tableView
+//Aula 287 - VendedorListaTableView. 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

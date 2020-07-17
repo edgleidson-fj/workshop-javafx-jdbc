@@ -1,7 +1,6 @@
 package gui;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -74,14 +73,14 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		inicializarNodes();
-	}
+		}
 
 	private void inicializarNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 		tableColumnNascimento.setCellValueFactory(new PropertyValueFactory<>("nascimento"));
-//Erro	Utils.formatTableColumnData(tableColumnNascimento, "dd/MM/yyyy"); //Formatar Data.
+		Utils.formatTableColumnData(tableColumnNascimento, "dd/MM/yyyy"); //Formatar Data.
 		tableColumnSalarioBase.setCellValueFactory(new PropertyValueFactory<>("salarioBase"));
 		Utils.formatTableColumnValorDecimais(tableColumnSalarioBase, 2); //Formatar com (0,00).
 
@@ -93,7 +92,7 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 		this.service = service;
 	}
 
-	public synchronized void atualizarTableView() {
+	public void atualizarTableView() {
 		if (service == null) {
 			throw new IllegalStateException("Service nulo!");
 		}

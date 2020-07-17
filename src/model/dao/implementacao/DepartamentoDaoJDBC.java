@@ -70,22 +70,29 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 			BD.fecharStatement(ps);
 		}
 	}
-
+	
 	@Override
 	public void excluirPorId(Integer id) {
-		PreparedStatement ps = null;
+		PreparedStatement st = null;
 		try {
-			ps = connection.prepareStatement(
-					"DELETE FROM department  " 
-							+ "WHERE Id = ? ");
-			ps.setInt(1, id);
-			ps.executeUpdate();
-		} catch (SQLException ex) {
-			new BDIntegrityException(ex.getMessage());
-		} finally {
-			BD.fecharStatement(ps);
+			st = connection.prepareStatement(
+				"DELETE FROM department WHERE Id = ?");
+
+			st.setInt(1, id);
+
+			st.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new BDIntegrityException(e.getMessage());
+		} 
+		finally {
+			BD.fecharStatement(st);
 		}
 	}
+	
+	
+	
+	
 
 	@Override
 	public Departamento buscarPorId(Integer id) {

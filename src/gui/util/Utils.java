@@ -29,7 +29,7 @@ public class Utils {
 		}
 	}
 
-	// Função para formatar campo com Data.
+	// Função para formatar campo com Data. - Erro.
 	public static <T> void formatTableColumnData(TableColumn<T, Date> tableColumn, String format) {
 		tableColumn.setCellFactory(column -> {
 			TableCell<T, Date> cell = new TableCell<T, Date>() {
