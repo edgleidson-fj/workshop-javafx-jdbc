@@ -1,5 +1,5 @@
 package application;
-//Aula 287 - VendedorListaTableView. 
+//Aula 289 - VendedorFormView. 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

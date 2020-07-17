@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -25,6 +28,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entidade.Vendedor;
 import model.service.VendedorService;
@@ -67,7 +72,7 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 	public void onBtNovoAction(ActionEvent evento) {
 		Stage stagePai = Utils.stageAtual(evento);
 		Vendedor obj = new Vendedor();
-//		criarDialogForm(obj, "/gui/vendedorFormView.fxml", stagePai);
+		criarDialogForm(obj, "/gui/vendedorFormView.fxml", stagePai);
 	}
 
 	@Override
@@ -104,7 +109,7 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 	}
 
 	// VendedorForm.
-/*	public void criarDialogForm(Vendedor obj, String nomeAbsoluto, Stage stagePai) {
+	public void criarDialogForm(Vendedor obj, String nomeAbsoluto, Stage stagePai) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
 			Pane painel = loader.load();
@@ -125,7 +130,7 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 		} catch (IOException ex) {
 			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar View", ex.getMessage(), AlertType.ERROR);
 		}
-	} */
+	} 
 
 	@Override
 	public void onRefreshDados() {
@@ -147,8 +152,8 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 				}
 
 				setGraphic(botao);
-		//		botao.setOnAction(
-		//				evento -> criarDialogForm(obj, "/gui/VendedorFormView.fxml", Utils.stageAtual(evento)));
+				botao.setOnAction(
+						evento -> criarDialogForm(obj, "/gui/VendedorFormView.fxml", Utils.stageAtual(evento)));
 			}
 		});
 	}   
@@ -175,12 +180,14 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 	}
 
 	private void excluirEntidade(Vendedor obj) {
+		/*
 		Alert alerta = new Alert(AlertType.CONFIRMATION);
 		alerta.setTitle("Confirmação!");
 		alerta.setHeaderText(null);
 		alerta.setContentText("Você tem certeza que deseja excluir?");
 		Optional<ButtonType> resultado = alerta.showAndWait(); 
-		//------------------------------------------------------		
+		//------------------------------------------------------*/
+		Optional<ButtonType> resultado = Alertas.mostrarConfirmacao("Confirmation", "Are you sure to delete?");
 
 		if (resultado.get() == ButtonType.OK) {
 			if (service == null) {
