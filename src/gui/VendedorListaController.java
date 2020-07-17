@@ -1,6 +1,8 @@
 package gui;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -41,6 +43,15 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 
 	@FXML // Coluna Nome.
 	private TableColumn<Vendedor, String> tableColumnNome;
+	
+	@FXML // Coluna Email.
+	private TableColumn<Vendedor, String> tableColumnEmail;
+	
+	@FXML // Coluna Data de Nascimento.
+	private TableColumn<Vendedor, Date> tableColumnNascimento;
+	
+	@FXML // Coluna Salário Base.
+	private TableColumn<Vendedor, Double> tableColumnSalarioBase;
 
 	@FXML // Coluna Editar.
 	private TableColumn<Vendedor, Vendedor> tableColumnEditar;
@@ -68,6 +79,11 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 	private void inicializarNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		tableColumnNascimento.setCellValueFactory(new PropertyValueFactory<>("nascimento"));
+//Erro	Utils.formatTableColumnData(tableColumnNascimento, "dd/MM/yyyy"); //Formatar Data.
+		tableColumnSalarioBase.setCellValueFactory(new PropertyValueFactory<>("salarioBase"));
+		Utils.formatTableColumnValorDecimais(tableColumnSalarioBase, 2); //Formatar com (0,00).
 
 		Stage stage = (Stage) Main.pegarMainScene().getWindow();
 		tableViewVendedor.prefHeightProperty().bind(stage.heightProperty());
@@ -77,14 +93,14 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 		this.service = service;
 	}
 
-	public void atualizarTableView() {
+	public synchronized void atualizarTableView() {
 		if (service == null) {
 			throw new IllegalStateException("Service nulo!");
 		}
 		List<Vendedor> lista = service.buscarTudo();
 		obsLista = FXCollections.observableArrayList(lista);
 		tableViewVendedor.setItems(obsLista);
-//		criarBotaoEditar();
+		criarBotaoEditar();
 		criarBotaoExcluir();
 	}
 
@@ -117,7 +133,7 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 		atualizarTableView();
 	}
 
-/*	private void criarBotaoEditar() {
+	private void criarBotaoEditar() {
 		tableColumnEditar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEditar.setCellFactory(param -> new TableCell<Vendedor, Vendedor>() {
 			private final Button botao = new Button("Editar");
@@ -132,11 +148,11 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 				}
 
 				setGraphic(botao);
-				botao.setOnAction(
-						evento -> criarDialogForm(obj, "/gui/VendedorFormView.fxml", Utils.stageAtual(evento)));
+		//		botao.setOnAction(
+		//				evento -> criarDialogForm(obj, "/gui/VendedorFormView.fxml", Utils.stageAtual(evento)));
 			}
 		});
-	}   */
+	}   
 
 	
 	private void criarBotaoExcluir() {
