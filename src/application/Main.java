@@ -1,5 +1,5 @@
 package application;
-//Aula 290 - TextField & DatePicker. 
+//Aula 291 - ComboBox Departamento. 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

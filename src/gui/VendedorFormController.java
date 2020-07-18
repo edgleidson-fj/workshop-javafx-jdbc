@@ -15,16 +15,24 @@ import gui.listeners.AlteracaoDeDadosListener;
 import gui.util.Alertas;
 import gui.util.Restricoes;
 import gui.util.Utils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+import javafx.util.Callback;
+import model.entidade.Departamento;
 import model.entidade.Vendedor;
 import model.exceptions.ValidacaoException;
+import model.service.DepartamentoService;
 import model.service.VendedorService;
 
 public class VendedorFormController implements Initializable {
@@ -32,6 +40,7 @@ public class VendedorFormController implements Initializable {
 	// Dependencia.
 	private Vendedor entidade;
 	private VendedorService service;
+	private DepartamentoService departamentoService;
 //---------------------------------------------
 	// Listener.
 	private List<AlteracaoDeDadosListener> alteracaoDeDadosListeners = new ArrayList<>();
@@ -51,6 +60,9 @@ public class VendedorFormController implements Initializable {
 	@FXML
 	private TextField txtSalarioBase;
 
+	@FXML
+	private ComboBox<Departamento> comboBoxDepartamento;
+
 	@FXML // Label de Erros.
 	private Label labelErroNome;
 
@@ -69,6 +81,9 @@ public class VendedorFormController implements Initializable {
 	@FXML
 	private Button btCancelar;
 
+	// Lista de Departamentos.
+	private ObservableList<Departamento> obsLista;
+
 	public void sobrescrevaRefreshDadosListener(AlteracaoDeDadosListener listener) {
 		alteracaoDeDadosListeners.add(listener);
 	}
@@ -78,8 +93,10 @@ public class VendedorFormController implements Initializable {
 		this.entidade = entidade;
 	}
 
-	public void setVendedorService(VendedorService service) {
+	// Injeção da dependência Service (Vendedor - Departamento).
+	public void setServices(VendedorService service, DepartamentoService departamentoService) {
 		this.service = service;
+		this.departamentoService = departamentoService;
 	}
 	// ----------------------------------------------------------------
 
@@ -151,6 +168,7 @@ public class VendedorFormController implements Initializable {
 		Restricoes.setTextFieldDouble(txtSalarioBase);
 		Restricoes.setTextFieldTamanhoMaximo(txtEmail, 50);
 		Utils.formatDatePicker(datePickerNascimento, "dd/MM/yyyy");
+		inicializarComboBoxDepartamento(); // Departamento.
 	}
 
 	// Preencher os dados do (DialogForm).
@@ -167,9 +185,25 @@ public class VendedorFormController implements Initializable {
 		// Fuso horário do sistema.
 		if (entidade.getNascimento() != null) {
 			datePickerNascimento
-					.setValue(LocalDate.ofInstant(
-							entidade.getNascimento().toInstant(), ZoneId.systemDefault()));
+					.setValue(LocalDate.ofInstant(entidade.getNascimento().toInstant(), ZoneId.systemDefault()));
 		}
+
+		// Preencher o ComboBox (Departamento).
+		if (entidade.getDepartamento() == null) {
+			comboBoxDepartamento.getSelectionModel().selectFirst(); // Selecione o primeiro.
+		} else {
+			comboBoxDepartamento.setValue(entidade.getDepartamento());
+		}
+	}
+
+	// Carregar a lista de Departamento no ComboBox.
+	public void carregarObjetosAssociados() {
+		if (departamentoService == null) {
+			throw new IllegalStateException("DepartamentoService nulo!");
+		}
+		List<Departamento> lista = departamentoService.buscarTudo();
+		obsLista = FXCollections.observableArrayList(lista);
+		comboBoxDepartamento.setItems(obsLista);
 	}
 
 	// Mensagem de Erro.
@@ -179,6 +213,20 @@ public class VendedorFormController implements Initializable {
 		if (campos.contains("nome")) {
 			labelErroNome.setText(erros.get("nome"));
 		}
+	}
+
+	// Inicializar ComboBox Departamento.
+	private void inicializarComboBoxDepartamento() {
+		Callback<ListView<Departamento>, ListCell<Departamento>> factory = lv -> new ListCell<Departamento>() {
+			@Override
+			protected void updateItem(Departamento item, boolean vazio) {
+				super.updateItem(item, vazio);
+				setText(vazio ? "" : item.getNome());
+			}
+		};
+
+		comboBoxDepartamento.setCellFactory(factory);
+		comboBoxDepartamento.setButtonCell(factory.call(null));
 	}
 
 }

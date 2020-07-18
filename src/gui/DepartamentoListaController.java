@@ -126,6 +126,7 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 			stageDialog.initModality(Modality.WINDOW_MODAL); // Impedir o acesso de outras janela.
 			stageDialog.showAndWait();
 		} catch (IOException ex) {
+			ex.printStackTrace();
 			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar View", ex.getMessage(), AlertType.ERROR);
 		}
 	}
@@ -178,41 +179,20 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 			}
 		});
 	}
-
-	/*/ Excluir. ***Atenção*** Apresentando erro. 
-	private void excluirEntidade(Departamento obj) {
-	 Optional<ButtonType> resultado =
-			 Alertas.mostrarConfirmacao("Confirmação!", "Você tem certeza que deseja excluir?");
-		
-	 // Botão OK dentro do (Optional).
-	 if(resultado.get() == ButtonType.OK) {
-		 if(service == null) {
-			 throw new IllegalStateException("Service nulo!");
-		 }
-		 try {
-			 service.excluir(obj);
-			 atualizarTableView();
-		}
-		 catch (BDIntegrityException ex) {
-			Alertas.mostrarAlerta("Erro ao excluir objeto", null, ex.getMessage(), AlertType.ERROR);
-		}
-		 
-	 }
-	} */
 	
 	private void excluirEntidade(Departamento obj) {
-		Optional<ButtonType> result = Alertas.mostrarConfirmacao("Confirmation", "Are you sure to delete?");
+		Optional<ButtonType> result = Alertas.mostrarConfirmacao("Confirmação", "Você tem certeza que deseja excluir?");
 
 		if (result.get() == ButtonType.OK) {
 			if (service == null) {
-				throw new IllegalStateException("Service was null");
+				throw new IllegalStateException("Service nulo!");
 			}
 			try {
 				service.excluir(obj);
 				atualizarTableView();
 			}
 			catch (BDIntegrityException e) {
-				Alertas.mostrarAlerta("Error removing object", null, e.getMessage(), AlertType.ERROR);
+				Alertas.mostrarAlerta("Erro ao excluir objeto", null, e.getMessage(), AlertType.ERROR);
 			}
 		}
 	}

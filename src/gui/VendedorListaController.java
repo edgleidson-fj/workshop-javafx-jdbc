@@ -32,6 +32,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entidade.Vendedor;
+import model.service.DepartamentoService;
 import model.service.VendedorService;
 
 public class VendedorListaController implements Initializable, AlteracaoDeDadosListener {
@@ -116,7 +117,8 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 
 			VendedorFormController controle = loader.getController();
 			controle.setVendedor(obj);
-			controle.setVendedorService(new VendedorService());
+			controle.setServices(new VendedorService(), new DepartamentoService());
+			controle.carregarObjetosAssociados(); // Lista de Departamentos.
 			controle.sobrescrevaRefreshDadosListener(this); // Refresh na TableView.
 			controle.atualizarDialogForm();
 
@@ -128,6 +130,7 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 			stageDialog.initModality(Modality.WINDOW_MODAL); // Impedir o acesso de outras janela.
 			stageDialog.showAndWait();
 		} catch (IOException ex) {
+			ex.printStackTrace();
 			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar View", ex.getMessage(), AlertType.ERROR);
 		}
 	} 
@@ -180,25 +183,18 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 	}
 
 	private void excluirEntidade(Vendedor obj) {
-		/*
-		Alert alerta = new Alert(AlertType.CONFIRMATION);
-		alerta.setTitle("Confirmação!");
-		alerta.setHeaderText(null);
-		alerta.setContentText("Você tem certeza que deseja excluir?");
-		Optional<ButtonType> resultado = alerta.showAndWait(); 
-		//------------------------------------------------------*/
-		Optional<ButtonType> resultado = Alertas.mostrarConfirmacao("Confirmation", "Are you sure to delete?");
+		Optional<ButtonType> resultado = Alertas.mostrarConfirmacao("Confirmação", "Você tem certeza que deseja excluir?");
 
 		if (resultado.get() == ButtonType.OK) {
 			if (service == null) {
-				throw new IllegalStateException("Service was null");
+				throw new IllegalStateException("Service nulo?");
 			}
 			try {
 				service.excluir(obj);
 				atualizarTableView();
 			}
 			catch (BDIntegrityException ex) {
-				Alertas.mostrarAlerta("Error removing object", null, ex.getMessage(), AlertType.ERROR);
+				Alertas.mostrarAlerta("Erro ao excluir objeto", null, ex.getMessage(), AlertType.ERROR);
 			}			
 		}
 	}
