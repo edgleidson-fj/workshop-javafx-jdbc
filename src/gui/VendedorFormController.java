@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -141,12 +143,36 @@ public class VendedorFormController implements Initializable {
 
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 
-		// Campo Nome nulo ou vazio. - .trim()= Eliminar espaço em branco no início e no
-		// final.
+		// Nome. 
+		// .trim()= Eliminar espaço em branco no início e no final.
 		if (txtNome.getText() == null || txtNome.getText().trim().equals("")) {
-			erro.addErro("nome", "Nome não pode está vázio.");
+			erro.addErro("nome", "Campo não pode está vazio.");
 		}
 		obj.setNome(txtNome.getText());
+		
+		// Email.
+		if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
+			erro.addErro("email", "Campo não pode está vazio.");
+		}
+		obj.setEmail(txtEmail.getText());
+		
+		// Nascimento (DatePicker).
+		if(datePickerNascimento.getValue() == null) {
+			erro.addErro("nascimento", "Campo não pode está vazio.");
+		}
+		else {
+		Instant instant = Instant.from(datePickerNascimento.getValue().atStartOfDay(ZoneId.systemDefault()));
+		obj.setNascimento(Date.from(instant));
+		}
+		
+		// Salário base (Double).
+		if (txtSalarioBase.getText() == null || txtSalarioBase.getText().trim().equals("")) {
+			erro.addErro("salarioBase", "Campo não pode está vazio.");
+		}
+		obj.setSalarioBase(Utils.stringParaDouble(txtSalarioBase.getText()));
+		
+		// Departamento (ComboBox).
+		obj.setDepartamento(comboBoxDepartamento.getValue());
 
 		// Erro for maior que zero.
 		if (erro.getErros().size() > 0) {
@@ -206,12 +232,36 @@ public class VendedorFormController implements Initializable {
 		comboBoxDepartamento.setItems(obsLista);
 	}
 
-	// Mensagem de Erro.
+	// Mensagem de Erro no campo vázio.
 	private void setMensagemDeErro(Map<String, String> erros) {
 		Set<String> campos = erros.keySet();
 
 		if (campos.contains("nome")) {
 			labelErroNome.setText(erros.get("nome"));
+		}
+		else {
+			labelErroNome.setText(erros.get(""));
+		}
+		
+		if (campos.contains("email")) {
+			labelErroEmail.setText(erros.get("email"));
+		}
+		else {
+			labelErroEmail.setText(erros.get(""));
+		}
+		
+		if (campos.contains("nascimento")) {
+			labelErroNascimento.setText(erros.get("nascimento"));
+		}
+		else {
+			labelErroNascimento.setText(erros.get(""));
+		}
+		
+		if (campos.contains("salarioBase")) {
+			labelErroSalarioBase.setText(erros.get("salarioBase"));
+		}
+		else {
+			labelErroSalarioBase.setText(erros.get(""));
 		}
 	}
 

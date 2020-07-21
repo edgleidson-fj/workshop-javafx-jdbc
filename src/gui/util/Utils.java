@@ -33,6 +33,15 @@ public class Utils {
 		}
 	}
 
+	// Função para transformar String em Double.
+		public static Double stringParaDouble(String str) {
+			try {
+				return Double.parseDouble(str);
+			} catch (NumberFormatException ex) {
+				return null;
+			}
+		}
+	
 	// Função para formatar campo com Data.
 	public static <T> void formatTableColumnData(TableColumn<T, Date> tableColumn, String format) {
 		tableColumn.setCellFactory(column -> {
