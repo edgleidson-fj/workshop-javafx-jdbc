@@ -31,6 +31,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.entidade.Departamento;
 import model.entidade.Vendedor;
 import model.service.DepartamentoService;
 import model.service.VendedorService;
@@ -63,6 +64,9 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 
 	@FXML // Coluna Excluir.
 	private TableColumn<Vendedor, Vendedor> tableColumnExcluir;
+	
+	@FXML // Coluna Departamento.
+	private TableColumn<Departamento, Departamento> tableColumnDep;
 
 	@FXML
 	private Button btNovo;
@@ -73,7 +77,7 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 	public void onBtNovoAction(ActionEvent evento) {
 		Stage stagePai = Utils.stageAtual(evento);
 		Vendedor obj = new Vendedor();
-		criarDialogForm(obj, "/gui/vendedorFormView.fxml", stagePai);
+		criarDialogForm(obj, "/gui/VendedorFormView.fxml", stagePai);
 	}
 
 	@Override
@@ -82,6 +86,7 @@ public class VendedorListaController implements Initializable, AlteracaoDeDadosL
 		}
 
 	private void inicializarNodes() {
+		tableColumnDep.setCellValueFactory(new PropertyValueFactory<>("departamento"));
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));

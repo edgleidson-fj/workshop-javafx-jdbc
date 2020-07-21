@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="365.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VendedorListaController">
+<VBox prefHeight="359.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VendedorListaController">
    <children>
       <Label text="Cadastro de Vendedor">
          <font>
@@ -35,6 +35,7 @@
             <TableColumn fx:id="tableColumnEmail" prefWidth="90.0" text="Email" />
             <TableColumn fx:id="tableColumnNascimento" prefWidth="103.0" text="Nascimento" />
             <TableColumn fx:id="tableColumnSalarioBase" prefWidth="125.0" text="Salário Base" />
+            <TableColumn fx:id="tableColumnDep" prefWidth="75.0" text="Departamento" />
             <TableColumn fx:id="tableColumnEditar" prefWidth="67.0" />
             <TableColumn fx:id="tableColumnExcluir" prefWidth="84.0" />
         </columns>

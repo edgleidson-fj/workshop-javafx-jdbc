@@ -63,7 +63,7 @@ public class DepartamentoListaController implements Initializable, AlteracaoDeDa
 		// Retornando Stage atual para caixa de dialogo.
 		Stage stagePai = Utils.stageAtual(evento);
 		Departamento obj = new Departamento();
-		criarDialogForm(obj, "/gui/departamentoFormView.fxml", stagePai);
+		criarDialogForm(obj, "/gui/DepartamentoFormView.fxml", stagePai);
 	}
 
 	// Método do Initializable.
